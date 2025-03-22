@@ -888,10 +888,30 @@ def render_tutor_mode(tutor):
                 
                 st.markdown(f"**Exploring: {concept_text}**")
                 
-                # Learning style options
-                learning_style = st.selectbox(
-                    "Select your preferred learning style:",
-                    ["Visual/Conceptual", "Practical/Examples", "Academic/Theoretical", "Storytelling"],
+                # Layout improvements
+                st.markdown("""
+                <div class='learning-container'>
+                    <h3>Personalized Learning Experience</h3>
+                    <p>Customize how you want to learn this concept</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    learning_style = st.selectbox(
+                        "Learning Style",
+                        ["Visual/Conceptual", "Practical/Examples", "Academic/Theoretical", "Interactive/Hands-on"],
+                        help="Choose how you want the content to be presented"
+                    )
+                
+                with col2:
+                    complexity = st.select_slider(
+                        "Content Complexity",
+                        options=["Beginner", "Intermediate", "Advanced", "Expert"],
+                        value="Intermediate",
+                        help="Adjust the depth of explanations"
+                    ), "Storytelling"],
                     key=f"learning_style_{hash(question_data['question'])}"
                 )
                 

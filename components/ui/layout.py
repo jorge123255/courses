@@ -41,38 +41,52 @@ def render_concept_card(title, content):
     """, unsafe_allow_html=True)
 
 
+def create_sidebar_navigation():
+    with st.sidebar:
+        st.markdown("### Learning Progress")
+        st.progress(0.7)
+        st.markdown("### Quick Navigation")
+        st.button("📚 Study Materials")
+        st.button("✍️ Practice Questions")
+        st.button("📊 Progress Analysis")
+
+def render_concept_section(concept, content):
+    st.markdown(f"""
+        <div class='knowledge-card'>
+            <h4>{concept}</h4>
+            <p>{content}</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+def create_interactive_elements():
+    tabs = st.tabs(["Learn", "Practice", "Review"])
+
+    with tabs[0]:
+        st.markdown("### Current Topic")
+        render_concept_section("Main Concept", "Detailed explanation here")
+
+    with tabs[1]:
+        st.markdown("### Practice Questions")
+        st.button("Generate New Question")
+
+    with tabs[2]:
+        st.markdown("### Review Progress")
+        st.line_chart({"progress": [0.3, 0.5, 0.8, 0.9]})
+
 def render_enhanced_layout():
     """Render the enhanced UI layout with modern design."""
     initialize_layout()
+    create_sidebar_navigation()
     st.markdown('<div class="main">', unsafe_allow_html=True)
 
     # Header section
     st.title("CISSP Tutor & Exam Platform")
 
-    # Navigation tabs
-    tabs = ["Study", "Practice Exam", "Progress", "Resources"]
-    st.markdown(
-        '<div class="nav-tabs">' +
-        ''.join([f'<div class="nav-tab{"" if i else " active"}">{tab}</div>' for i, tab in enumerate(tabs)]) +
-        '</div>',
-        unsafe_allow_html=True
-    )
+    create_interactive_elements()
 
-    # Welcome message
-    st.markdown("""
-    <div class="stCard">
-        <h2>Welcome to Your CISSP Study Journey</h2>
-        <p>Track your progress, practice with exam questions, and master CISSP concepts.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Help button
-    st.markdown(
-        '<div class="floating-help">?</div>',
-        unsafe_allow_html=True
-    )
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 def render_header():
     st.markdown("""
@@ -82,33 +96,6 @@ def render_header():
         </div>
     """, unsafe_allow_html=True)
 
-def render_side_navigation():
-    sections = [
-        ("Security Fundamentals", 80),
-        ("Risk Management", 60),
-        ("Asset Security", 40),
-        ("Security Architecture", 30),
-        ("Network Security", 20),
-        ("Identity Management", 10),
-        ("Security Assessment", 0),
-        ("Security Operations", 0)
-    ]
-
-    for section, progress in sections:
-        render_progress(progress, 100) # Using render_progress for each section
-        st.markdown(f"""
-            <div class="nav-item{' active' if section == 'Risk Management' else ''}">
-                {section}
-            </div>
-        """, unsafe_allow_html=True)
-
 
 def render_main_content():
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    st.write("## Current Topic: Risk Management")
-
-    # Example usage of new components
-    render_concept_card("Key Concepts", "Risk management fundamentals and methodologies...")
-    render_knowledge_check("What is risk?", ["A. Probability x Impact", "B. Threat x Vulnerability", "C. Asset x Control", "D. All of the above"], 0) # Example question
-
-    st.markdown('</div>', unsafe_allow_html=True)
+    pass # This function is now largely redundant

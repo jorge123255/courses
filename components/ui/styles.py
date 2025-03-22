@@ -109,3 +109,45 @@ def load_css():
     }
     </style>
     """, unsafe_allow_html=True)
+
+def apply_custom_styles():
+    st.markdown("""
+        <style>
+        .learning-container {
+            background-color: #f0f2f6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        .stSelectbox {
+            background-color: white;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .knowledge-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .concept-map {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-element:hover {
+            transform: scale(1.02);
+        }
+        </style>
+    """, unsafe_allow_html=True)
