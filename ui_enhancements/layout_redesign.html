@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Tutor - Enhanced Layout</title>
+    <style>
+        :root {
+            --primary: #1E6091;
+            --primary-light: #6497B1;
+            --secondary: #B3CDE0;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-800: #343a40;
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 10px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 20px rgba(0,0,0,0.15);
+            --transition-standard: all 0.2s ease-in-out;
+            --transition-fast: all 0.15s ease;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "sidebar main";
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            grid-area: header;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-tab {
+            padding: 8px 16px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-standard);
+            font-weight: 500;
+        }
+        
+        .nav-tab:hover, .nav-tab.active {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .nav-tab.active {
+            background-color: rgba(255,255,255,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* User profile section */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background-color: white;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            border-right: 1px solid var(--gray-200);
+        }
+        
+        .progress-container {
+            margin-bottom: 24px;
+            background-color: var(--gray-100);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: var(--secondary);
+            border-radius: var(--radius-sm);
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: var(--radius-sm);
+            width: 35%;
+            transition: width 1s ease-in-out;
+        }
+        
+        .section-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .sidebar h3 {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-800);
+        }
+        
+        .section-link {
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            color: var(--gray-800);
+            text-decoration: none;
+            transition: var(--transition-standard);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-link:hover, .section-link.active {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+        
+        .section-link.completed {
+            border-left: 3px solid var(--success);
+            padding-left: 9px; /* Adjust for border */
+        }
+        
+        .section-link.active {
+            border-left: 3px solid var(--primary);
+            padding-left: 9px; /* Adjust for border */
+            font-weight: bold;
+            background-color: rgba(179, 205, 224, 0.4);
+        }
+        
+        .section-link .icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .section-link .completion-indicator {
+            margin-left: auto;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .section-link.completed .completion-indicator {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            grid-area: main;
+            padding: 24px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+        }
+        
+        .breadcrumbs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: var(--gray-800);
+        }
+        
+        .breadcrumbs a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumbs span {
+            color: var(--gray-800);
+        }
+        
+        .content-header {
+            margin-bottom: 24px;
+            position: relative;
+        }
+        
+        .content-header h2 {
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .content-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 24px;
+        }
+        
+        .content-tab {
+            padding: 10px 20px;
+            color: var(--gray-800);
+            text-decoration: none;
+            position: relative;
+            transition: var(--transition-standard);
+        }
+        
+        .content-tab.active {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .content-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .content-tab:hover:not(.active) {
+            background-color: var(--gray-100);
+            color: var(--primary-light);
+        }
+        
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+            transition: var(--transition-standard);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            font-weight: 600;
+            background-color: var(--gray-100);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Grid Layout */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        /* Concept Map */
+        .concept-map {
+            background-color: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .concept-title {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .concept-section {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            transition: var(--transition-standard);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .concept-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .concept-section h4 {
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .concept-section ul {
+            padding-left: 24px;
+        }
+        
+        .concept-section li {
+            margin-bottom: 6px;
+        }
+        
+        /* Quiz */
+        .quiz-container {
+            position: sticky;
+            bottom: 20px;
+            background-color: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.15);
+            padding: 20px;
+            z-index: 90;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition-standard);
+        }
+        
+        .quiz-container:hover {
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.18);
+        }
+        
+        .quiz-container h3 {
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+        
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-standard);
+            font-size: 0.95rem;
+        }
+        
+        .quiz-option:hover {
+            background-color: var(--secondary);
+            transform: translateY(-1px);
+        }
+        
+        .quiz-option.selected {
+            background-color: var(--primary-light);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .quiz-option.correct {
+            background-color: rgba(76, 175, 80, 0.15);
+            border-color: var(--success);
+            position: relative;
+            padding-left: 36px;
+        }
+        
+        .quiz-option.correct::before {
+            content: '✓';
+            position: absolute;
+            left: 12px;
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: rgba(244, 67, 54, 0.15);
+            border-color: var(--danger);
+            position: relative;
+            padding-left: 36px;
+        }
+        
+        .quiz-option.incorrect::before {
+            content: '✗';
+            position: absolute;
+            left: 12px;
+            color: var(--danger);
+            font-weight: bold;
+        }
+        
+        .quiz-buttons {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            min-width: 120px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition-standard);
+            font-size: 24px;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Progress indicators */
+        .progress-indicators {
+            display: flex;
+            margin-bottom: 24px;
+            gap: 16px;
+        }
+        
+        .progress-indicator {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .progress-indicator::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            background-color: var(--gray-200);
+            width: 100%;
+            top: 14px;
+            left: 50%;
+            z-index: 0;
+        }
+        
+        .progress-indicator:last-child::after {
+            display: none;
+        }
+        
+        .indicator-bubble {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            color: var(--gray-800);
+            font-weight: bold;
+            transition: var(--transition-standard);
+        }
+        
+        .progress-indicator.completed .indicator-bubble {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .progress-indicator.active .indicator-bubble {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(30, 96, 145, 0.2);
+        }
+        
+        .indicator-label {
+            font-size: 0.8rem;
+            color: var(--gray-800);
+            text-align: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-areas:
+                    "header"
+                    "main";
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                bottom: 0;
+                width: 280px;
+                z-index: 99;
+            }
+            
+            .sidebar.active {
+                display: block;
+            }
+            
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 8px 16px;
+            }
+            
+            .header h1 {
+                font-size: 1.25rem;
+            }
+            
+            .nav-tabs {
+                gap: 4px;
+            }
+            
+            .nav-tab {
+                padding: 6px 10px;
+                font-size: 0.875rem;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .quiz-container {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 15px;
+            }
+            
+            .floating-btn {
+                bottom: 10px;
+                right: 10px;
+                width: 48px;
+                height: 48px;
+            }
+        }
+        
+        /* Animation effects */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with navigation -->
+        <header class="header">
+            <h1>CISSP Tutor</h1>
+            <div class="nav-tabs">
+                <a href="#" class="nav-tab active">Learn</a>
+                <a href="#" class="nav-tab">Practice Exam</a>
+                <a href="#" class="nav-tab">My Progress</a>
+                <a href="#" class="nav-tab">Resources</a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+            </div>
+        </header>
+        
+        <!-- Sidebar with navigation and progress -->
+        <aside class="sidebar">
+            <div class="progress-container">
+                <h3>Your Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <small>35% Complete</small>
+            </div>
+            
+            <h3>Learning Sections</h3>
+            <nav class="section-nav">
+                <a href="#" class="section-link completed">
+                    <span class="icon">📘</span>
+                    Security Fundamentals
+                    <span class="completion-indicator">✓</span>
+                </a>
+                <a href="#" class="section-link completed">
+                    <span class="icon">📊</span>
+                    Risk Management
+                    <span class="completion-indicator">✓</span>
+                </a>
+                <a href="#" class="section-link active">
+                    <span class="icon">🔒</span>
+                    Security and Risk Management
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">💼</span>
+                    Asset Security
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">🏗️</span>
+                    Security Architecture
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">🌐</span>
+                    Network Security
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">👤</span>
+                    Identity Management
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">📝</span>
+                    Security Assessment
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">⚙️</span>
+                    Security Operations
+                </a>
+                <a href="#" class="section-link">
+                    <span class="icon">💻</span>
+                    Software Development Security
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main content area -->
+        <main class="main-content">
+            <div class="breadcrumbs">
+                <a href="#">Home</a> &gt; <a href="#">Learning Modules</a> &gt; <span>Security and Risk Management</span>
+            </div>
+            
+            <div class="content-header">
+                <h2>Security and Risk Management</h2>
+                <div class="content-tabs">
+                    <a href="#" class="content-tab active">Learn</a>
+                    <a href="#" class="content-tab">Practice</a>
+                    <a href="#" class="content-tab">Flashcards</a>
+                    <a href="#" class="content-tab">Assessment</a>
+                </div>
+            </div>
+            
+            <!-- Progress indicators -->
+            <div class="progress-indicators">
+                <div class="progress-indicator completed">
+                    <div class="indicator-bubble">1</div>
+                    <div class="indicator-label">Introduction</div>
+                </div>
+                <div class="progress-indicator active">
+                    <div class="indicator-bubble">2</div>
+                    <div class="indicator-label">Key Concepts</div>
+                </div>
+                <div class="progress-indicator">
+                    <div class="indicator-bubble">3</div>
+                    <div class="indicator-label">Implementation</div>
+                </div>
+                <div class="progress-indicator">
+                    <div class="indicator-bubble">4</div>
+                    <div class="indicator-label">Assessment</div>
+                </div>
+            </div>
+            
+            <!-- Content grid -->
+            <div class="grid-2col">
+                <!-- Left column: Visual concept map -->
+                <div class="card animate-fade-in">
+                    <div class="card-header">
+                        Visual Concept Map
+                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.8rem;">Expand</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="concept-map">
+                            <div class="concept-title">
+                                Security and Risk Management
+                            </div>
+                            <div class="concept-section">
+                                <h4>Key Principles</h4>
+                                <ul>
+                                    <li>Least Privilege</li>
+                                    <li>Separation of Duties</li>
+                                    <li>Defense in Depth</li>
+                                </ul>
+                            </div>
+                            <div class="grid-2col">
+                                <div class="concept-section">
+                                    <h4>Technologies</h4>
+                                    <ul>
+                                        <li>Implementation Methods</li>
+                                        <li>Technical Controls</li>
+                                    </ul>
+                                </div>
+                                <div class="concept-section">
+                                    <h4>Processes</h4>
+                                    <ul>
+                                        <li>Operational Procedures</li>
+                                        <li>Audit Requirements</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right column: Key Components -->
+                <div class="card animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-header">
+                        Key Components
+                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.8rem;">Filter</button>
+                    </div>
+                    <div class="card-body">
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr style="background-color: var(--gray-100);">
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--gray-200);">Component</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--gray-200);">Description</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);"><strong>Principles</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);">Core security concepts that guide implementation</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);"><strong>Technologies</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);">Tools and systems that enforce security measures</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);"><strong>Processes</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--gray-200);">Procedures and workflows that maintain security</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Governance</strong></td>
+                                <td style="padding: 10px;">Rules and frameworks that govern security decisions</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Relationships section -->
+            <div class="card animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="card-header">
+                    Key Relationships
+                </div>
+                <div class="card-body">
+                    <p>In Security and Risk Management, the relationship between principles, technologies, and governance creates a framework that supports secure operations. The correct understanding of these relationships is essential for implementing effective security measures.</p>
+                </div>
+            </div>
+            
+            <!-- Knowledge Check -->
+            <div class="quiz-container animate-fade-in" style="animation-delay: 0.3s;">
+                <h3>Quick Knowledge Check</h3>
+                <p>Based on this explanation about Security and Risk Management, which statement is correct?</p>
+                
+                <button class="quiz-option selected">The correct answer is D because, as stated in the NIST Cybersecurity Framework (CSF), Risk management involves not only identifying and assessing potential risks but also continuously monitoring and reviewing those assessments to ensure they remain accurate.</button>
+                <button class="quiz-option">Security and Risk Management is mainly concerned with compliance rather than security effectiveness.</button>
+                <button class="quiz-option">In Security and Risk Management, the primary focus is on technical controls rather than administrative procedures.</button>
+                
+                <div class="quiz-buttons">
+                    <button class="btn btn-primary">Check Answer</button>
+                    <button class="btn btn-secondary">Explain Further</button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Floating help button -->
+        <div class="floating-btn">?</div>
+    </div>
+</body>
+</html> 

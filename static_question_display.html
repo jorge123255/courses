@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Review Question Display</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        h1 {
+            color: #1E3A8A;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .question-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            color: #1E3A8A;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .option-button {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        
+        .option-button:hover {
+            background-color: #f0f0f0;
+            border-color: #aaa;
+        }
+        
+        .option-button.selected {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+        }
+        
+        .explanation-card {
+            background-color: #f7f9fc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid #2196F3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: none;
+        }
+        
+        .explanation-title {
+            font-weight: 600;
+            color: #2196F3;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .references {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+        }
+        
+        .result-message {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background-color: #e6f7e6;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .success:before {
+            content: "✓";
+            font-size: 18px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .error:before {
+            content: "✕";
+            font-size: 18px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* New styles for learning features */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #1890ff;
+            color: #1890ff;
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .learning-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: const;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 30px;
+            border: 1px solid #e8eaed;
+        }
+        
+        .learning-section h3 {
+            color: #1E3A8A;
+            border-bottom: 1px solid #e8eaed;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .learning-section select, 
+        .learning-section button {
+            margin: 10px 0;
+        }
+        
+        .code-block {
+            background-color: #f4f4f9;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 15px 0;
+            border-left: 4px solid #1E3A8A;
+            white-space: pre-wrap;
+        }
+        
+        .flashcard {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin: 20px 0;
+            position: relative;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            height: 200px;
+        }
+        
+        .flashcard .front,
+        .flashcard .back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .flashcard .back {
+            transform: rotateY(180deg);
+            background-color: #f0f7ff;
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .flashcard-buttons button {
+            margin: 0 10px;
+        }
+        
+        .mermaid-diagram {
+            margin: 20px 0;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            min-width: 100px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+    </style>
+</head>
+<body>
+    <h1>CISSP Exam Review</h1>
+    
+    <div class="question-card">
+        <h2 class="question-header">Question on Identity and Access Management</h2>
+        <p>An organization has implemented a role-based access control system that grants users permissions based on their job functions. However, some employees have complained that they need to switch between roles frequently due to project changes or temporary assignments. Which of the following would be the most effective solution to address this issue while maintaining compliance with organizational policies and regulatory requirements?</p>
+        
+        <div class="options-container">
+            <button class="option-button" data-option="A">A. Implement a single sign-on (SSO) system that allows users to access multiple applications with a single set of credentials</button>
+            <button class="option-button" data-option="B">B. Introduce dynamic role changes, where user permissions are automatically updated in real-time based on their current project assignments</button>
+            <button class="option-button" data-option="C">C. Use a hierarchical role model, where employees are assigned a higher-level role that encompasses all the roles they may need to switch between</button>
+            <button class="option-button" data-option="D">D. Replace the role-based access control system with an attribute-based access control (ABAC) system that grants permissions based on user attributes</button>
+        </div>
+    </div>
+    
+    <div class="result-message success" id="success-message">
+        Correct! You've selected the right answer.
+    </div>
+    
+    <div class="result-message error" id="error-message">
+        Incorrect. The correct answer is shown in the explanation below.
+    </div>
+    
+    <div class="explanation-card" id="explanation">
+        <div class="explanation-title">Explanation</div>
+        <p id="explanation-text">Option C is correct because introducing a hierarchical role model allows employees to be assigned a higher-level role that encompasses all the roles they may need to switch between. This approach maintains compliance with organizational policies and regulatory requirements, while also addressing the issue of frequent role switching.</p>
+        <p id="incorrect-options">Option A is incorrect because SSO systems do not address the specific issue of role switching; they only simplify user authentication. Option B is incorrect because dynamic role changes could compromise system security if not properly managed, and may require significant updates to existing access control policies. Option D is incorrect because replacing the role-based system with ABAC would require a fundamental change in the organization's access control strategy, which may be overly complex and time-consuming.</p>
+        <div class="references" id="references">
+            <strong>References:</strong>
+            <ul>
+                <li>(ISC)², Inc., Official Study Guide (OSG), 8th Edition, page 315</li>
+                <li>Shon Harris et al., CISSP Study Guide, 7th Edition, Chapter 5: Access Control, page 247</li>
+            </ul>
+        </div>
+    </div>
+    
+    <button class="button" id="new-question">Generate New Question</button>
+    
+    <script>
+        // Sample questions data
+        const questions = [
+            {
+                topic: "Identity and Access Management",
+                question: "An organization has implemented a role-based access control system that grants users permissions based on their job functions. However, some employees have complained that they need to switch between roles frequently due to project changes or temporary assignments. Which of the following would be the most effective solution to address this issue while maintaining compliance with organizational policies and regulatory requirements?",
+                options: [
+                    "A. Implement a single sign-on (SSO) system that allows users to access multiple applications with a single set of credentials",
+                    "B. Introduce dynamic role changes, where user permissions are automatically updated in real-time based on their current project assignments",
+                    "C. Use a hierarchical role model, where employees are assigned a higher-level role that encompasses all the roles they may need to switch between",
+                    "D. Replace the role-based access control system with an attribute-based access control (ABAC) system that grants permissions based on user attributes"
+                ],
+                correctAnswer: "C",
+                explanation: "Option C is correct because introducing a hierarchical role model allows employees to be assigned a higher-level role that encompasses all the roles they may need to switch between. This approach maintains compliance with organizational policies and regulatory requirements, while also addressing the issue of frequent role switching.\n\nOption A is incorrect because SSO systems do not address the specific issue of role switching; they only simplify user authentication. Option B is incorrect because dynamic role changes could compromise system security if not properly managed, and may require significant updates to existing access control policies. Option D is incorrect because replacing the role-based system with ABAC would require a fundamental change in the organization's access control strategy, which may be overly complex and time-consuming.",
+                references: [
+                    "(ISC)², Inc., Official Study Guide (OSG), 8th Edition, page 315",
+                    "Shon Harris et al., CISSP Study Guide, 7th Edition, Chapter 5: Access Control, page 247"
+                ]
+            },
+            {
+                topic: "Security Architecture and Engineering",
+                question: "A security architect is designing a system that needs to provide confidentiality for data at rest. Which of the following encryption approaches would be MOST appropriate for this requirement?",
+                options: [
+                    "A. Symmetric encryption with keys stored in a hardware security module (HSM)",
+                    "B. Asymmetric encryption with private keys distributed to all users",
+                    "C. Hashing algorithms applied to the data before storage",
+                    "D. Digital signatures applied to each data record"
+                ],
+                correctAnswer: "A",
+                explanation: "Option A is correct because symmetric encryption is efficient for encrypting large volumes of data at rest, and storing the keys in a hardware security module (HSM) provides strong protection for the encryption keys.\n\nOption B is incorrect because asymmetric encryption is typically slower than symmetric encryption for large data volumes, and distributing private keys to all users compromises the security of the private keys. Option C is incorrect because hashing is a one-way function that does not allow for data recovery, making it unsuitable for protecting data that needs to be accessed later. Option D is incorrect because digital signatures provide integrity and authentication, not confidentiality.",
+                references: [
+                    "(ISC)², Inc., Official Study Guide (OSG), 8th Edition, page 492",
+                    "(ISC)², Inc., CBK Guide, Security and Risk Management Knowledge Area, Section 3.2: Cryptography"
+                ]
+            },
+            {
+                topic: "Security Operations",
+                question: "During a security incident, a forensic analyst needs to collect evidence from a compromised system. Which of the following actions should be performed FIRST?",
+                options: [
+                    "A. Run antivirus software to remove malware",
+                    "B. Create a forensic image of the system",
+                    "C. Interview system users about suspicious activities",
+                    "D. Restart the system in safe mode"
+                ],
+                correctAnswer: "B",
+                explanation: "Option B is correct because creating a forensic image of the system should be done first to preserve all evidence in its original state before any changes are made to the system.\n\nOption A is incorrect because running antivirus software would modify the system and potentially destroy valuable evidence. Option C is incorrect because interviewing users is important, but it should not precede evidence collection from volatile sources. Option D is incorrect because restarting the system would cause the loss of volatile data such as running processes and memory contents.",
+                references: [
+                    "(ISC)², Inc., Official Study Guide (OSG), 8th Edition, page 873",
+                    "Shon Harris et al., CISSP Study Guide, 7th Edition, Chapter 7: Security Operations, page 412"
+                ]
+            }
+        ];
+        
+        // Initialize variables
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        
+        // DOM elements
+        const questionHeader = document.querySelector('.question-header');
+        const questionText = document.querySelector('.question-card p');
+        const optionButtons = document.querySelectorAll('.option-button');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const explanationCard = document.getElementById('explanation');
+        const explanationText = document.querySelector('#explanation-text');
+        const incorrectOptions = document.querySelector('#incorrect-options');
+        const newQuestionButton = document.getElementById('new-question');
+        
+        // Function to load a question
+        function loadQuestion(index) {
+            const question = questions[index];
+            
+            // Update question content
+            questionHeader.textContent = `Question on ${question.topic}`;
+            questionText.textContent = question.question;
+            
+            // Update options
+            optionButtons.forEach((button, i) => {
+                button.textContent = question.options[i];
+                button.dataset.option = question.options[i].charAt(0);
+                button.classList.remove('selected');
+            });
+            
+            // Reset UI state
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            explanationCard.style.display = 'none';
+            document.getElementById('references').style.display = 'none';
+            selectedOption = null;
+        }
+        
+        // Event listeners for option buttons
+        optionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Clear previous selection
+                optionButtons.forEach(btn => btn.classList.remove('selected'));
+                
+                // Mark this option as selected
+                button.classList.add('selected');
+                selectedOption = button.dataset.option;
+                
+                // Check if answer is correct
+                const currentQuestion = questions[currentQuestionIndex];
+                if (selectedOption === currentQuestion.correctAnswer) {
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                } else {
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+                
+                // Show explanation
+                const explanationParts = currentQuestion.explanation.split('\n\n');
+                explanationText.textContent = explanationParts[0]; // Correct answer explanation
+                
+                if (explanationParts.length > 1) {
+                    incorrectOptions.textContent = explanationParts[1]; // Incorrect options explanation
+                } else {
+                    incorrectOptions.textContent = '';
+                }
+                
+                // Add references if they exist
+                const referencesSection = document.getElementById('references');
+                if (currentQuestion.references) {
+                    referencesSection.style.display = 'block';
+                    const referencesList = document.querySelector('#references ul');
+                    referencesList.innerHTML = '';
+                    
+                    currentQuestion.references.forEach(reference => {
+                        const li = document.createElement('li');
+                        li.textContent = reference;
+                        referencesList.appendChild(li);
+                    });
+                } else {
+                    referencesSection.style.display = 'none';
+                }
+                
+                explanationCard.style.display = 'block';
+            });
+        });
+        
+        // Create tabs for enhanced learning
+        function addLearningTabs() {
+            // Create the tabs container
+            const learningSection = document.createElement('div');
+            learningSection.className = 'learning-section';
+            learningSection.innerHTML = `
+                <h3>Enhanced Learning</h3>
+                <div class="tabs">
+                    <div class="tab active" data-tab="concept-map">Concept Map</div>
+                    <div class="tab" data-tab="flashcards">Flashcards</div>
+                    <div class="tab" data-tab="practice">Practice</div>
+                </div>
+                
+                <div class="tab-content active" id="concept-map">
+                    <h4>Visual Concept Map</h4>
+                    <p>This diagram shows how this topic relates to other CISSP concepts:</p>
+                    <div class="mermaid-diagram">
+                        <pre class="mermaid">
+                        graph TD
+                            A[Current Topic] --> B[Security Principles]
+                            A --> C[Technologies]
+                            A --> D[Procedures]
+                            
+                            B --> B1[Confidentiality]
+                            B --> B2[Integrity]
+                            B --> B3[Availability]
+                            
+                            C --> C1[Implementation]
+                            C --> C2[Configuration]
+                            
+                            D --> D1[Policies]
+                            D --> D2[Standards]
+                        </pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="flashcards">
+                    <h4>Key Concept Flashcards</h4>
+                    <p>Test your knowledge of these key concepts:</p>
+                    
+                    <div class="flashcard">
+                        <div class="front">
+                            <p>What is the primary purpose of this security concept?</p>
+                        </div>
+                        <div class="back">
+                            <p>The primary purpose is to ensure that security controls are implemented in a layered approach to protect information assets.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-buttons">
+                        <button class="button" id="flip-flashcard">Flip Card</button>
+                        <button class="button" id="next-flashcard" style="background-color: #1890ff;">Next Card</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="practice">
+                    <h4>Practice Application</h4>
+                    <p>Apply what you've learned to this scenario:</p>
+                    
+                    <div class="code-block">
+                    You are a security consultant for a financial organization that needs to implement this security concept.
+                    What steps would you recommend they take?
+                    </div>
+                    
+                    <textarea id="practice-answer" rows="5" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd;"></textarea>
+                    
+                    <button class="button" id="check-practice">Submit Answer</button>
+                    
+                    <div id="practice-feedback" style="display: none; margin-top: 15px; padding: 15px; border-radius: 5px; background-color: #e6f7ff; border-left: 4px solid #1890ff;">
+                        <p>Good answer! You've correctly identified the key implementation steps.</p>
+                        <p>Some additional points to consider:</p>
+                        <ul>
+                            <li>Consider regulatory requirements specific to the financial industry</li>
+                            <li>Implement regular testing and validation of controls</li>
+                            <li>Ensure proper documentation and training is provided</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            // Add the learning section to the page
+            document.body.insertBefore(learningSection, document.getElementById('new-question'));
+            
+            // Add event listeners for tabs
+            const tabs = learningSection.querySelectorAll('.tab');
+            const tabContents = learningSection.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to the clicked tab and its content
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Add event listeners for flashcards
+            const flipButton = document.getElementById('flip-flashcard');
+            const nextButton = document.getElementById('next-flashcard');
+            const flashcard = document.querySelector('.flashcard');
+            
+            flipButton.addEventListener('click', () => {
+                flashcard.classList.toggle('flipped');
+            });
+            
+            // Add event listener for practice
+            const checkPracticeButton = document.getElementById('check-practice');
+            const practiceFeedback = document.getElementById('practice-feedback');
+            
+            checkPracticeButton.addEventListener('click', () => {
+                const answer = document.getElementById('practice-answer').value;
+                if (answer.length > 10) {
+                    practiceFeedback.style.display = 'block';
+                } else {
+                    alert('Please provide a more detailed answer to receive feedback.');
+                }
+            });
+            
+            // Initialize Mermaid for diagrams
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({ startOnLoad: true });
+            } else {
+                // Load Mermaid dynamically
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js';
+                script.onload = function() {
+                    mermaid.initialize({ startOnLoad: true });
+                };
+                document.head.appendChild(script);
+            }
+        }
+        
+        // Event listener for new question button
+        newQuestionButton.addEventListener('click', () => {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            loadQuestion(currentQuestionIndex);
+        });
+        
+        // Initialize with the first question
+        loadQuestion(currentQuestionIndex);
+        
+        // Add learning tabs after a short delay
+        setTimeout(addLearningTabs, 500);
+    </script>
+</body>
+</html>
