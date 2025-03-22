@@ -1618,11 +1618,14 @@ def render_data_management():
                     st.markdown(f"- {epub_file.name}")
             
             if st.button("Process All Documents", key="process_all"):
-                with st.spinner("Processing documents and generating embeddings..."):
-                    # Run the ingestion process for all document types
-                    ingest_documents(file_types=["pdf", "epub"])
-                    
-                    st.success("Document processing complete!")
+                try:
+                    with st.spinner("Processing documents and generating embeddings..."):
+                        # Run the ingestion process for all document types
+                        ingest_documents(file_types=["pdf", "epub"])
+                        st.success("Document processing complete!")
+                except Exception as e:
+                    st.error(f"Error processing documents: {str(e)}")
+                    logger.error(f"Document processing error: {str(e)}", exc_info=True)
                     st.info("The system is now ready to answer questions about the uploaded materials.")
         else:
             st.info("No document files found. Please upload some files first.")

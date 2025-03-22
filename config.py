@@ -29,3 +29,18 @@ OLLAMA_BASE_URL = "http://localhost:11434"
 
 # Tutoring settings
 MAX_HISTORY_LENGTH = 10  # Number of previous interactions to maintain in context
+import logging
+import os
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('cissp_tutor.log')
+    ]
+)
+
+# Get logger
+logger = logging.getLogger(__name__)
