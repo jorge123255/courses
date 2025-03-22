@@ -1,6 +1,4 @@
-"""
-Layout components for the CISSP Tutor & Exam Platform.
-"""
+"""Layout components for the CISSP Tutor & Exam Platform."""
 import streamlit as st
 from .styles import apply_custom_styles # Assuming styles.py exists and contains CSS
 
@@ -11,14 +9,6 @@ def initialize_layout():
         page_icon="📚",
         layout="wide"
     )
-
-def render_header():
-    st.markdown("""
-        <div style='text-align: center; padding: 2rem 0;'>
-            <h1>CISSP Tutor & Exam Platform</h1>
-            <p style='font-size: 1.2rem; color: #666;'>Your AI-powered study companion</p>
-        </div>
-    """, unsafe_allow_html=True)
 
 def render_progress(current, total):
     progress = (current / total) * 100
@@ -52,18 +42,45 @@ def render_concept_card(title, content):
 
 
 def render_enhanced_layout():
+    """Render the enhanced UI layout with modern design."""
     initialize_layout()
-    render_header()
+    st.markdown('<div class="main">', unsafe_allow_html=True)
 
-    # Main content area 
-    col1, col2 = st.columns([1, 3])
+    # Header section
+    st.title("CISSP Tutor & Exam Platform")
 
-    with col1:
-        render_side_navigation()
+    # Navigation tabs
+    tabs = ["Study", "Practice Exam", "Progress", "Resources"]
+    st.markdown(
+        '<div class="nav-tabs">' +
+        ''.join([f'<div class="nav-tab{"" if i else " active"}">{tab}</div>' for i, tab in enumerate(tabs)]) +
+        '</div>',
+        unsafe_allow_html=True
+    )
 
-    with col2:
-        render_main_content()
+    # Welcome message
+    st.markdown("""
+    <div class="stCard">
+        <h2>Welcome to Your CISSP Study Journey</h2>
+        <p>Track your progress, practice with exam questions, and master CISSP concepts.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
+    # Help button
+    st.markdown(
+        '<div class="floating-help">?</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+def render_header():
+    st.markdown("""
+        <div style='text-align: center; padding: 2rem 0;'>
+            <h1>CISSP Tutor & Exam Platform</h1>
+            <p style='font-size: 1.2rem; color: #666;'>Your AI-powered study companion</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 def render_side_navigation():
     sections = [
@@ -86,7 +103,6 @@ def render_side_navigation():
         """, unsafe_allow_html=True)
 
 
-
 def render_main_content():
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
     st.write("## Current Topic: Risk Management")
@@ -94,6 +110,5 @@ def render_main_content():
     # Example usage of new components
     render_concept_card("Key Concepts", "Risk management fundamentals and methodologies...")
     render_knowledge_check("What is risk?", ["A. Probability x Impact", "B. Threat x Vulnerability", "C. Asset x Control", "D. All of the above"], 0) # Example question
-
 
     st.markdown('</div>', unsafe_allow_html=True)
