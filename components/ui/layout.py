@@ -73,6 +73,24 @@ def create_interactive_elements():
         st.markdown("### Review Progress")
         st.line_chart({"progress": [0.3, 0.5, 0.8, 0.9]})
 
+def render_study_card(title, content):
+    """Render a study material card."""
+    return f"""
+    <div class="study-card">
+        <div class="topic-header">{title}</div>
+        <div class="study-content">{content}</div>
+    </div>
+    """
+
+def render_concept_card(title, description):
+    """Render a concept explanation card."""
+    return f"""
+    <div class="concept-card">
+        <div class="concept-title">{title}</div>
+        <div class="concept-description">{description}</div>
+    </div>
+    """
+
 def render_enhanced_layout():
     """Render the enhanced UI layout with modern design."""
     initialize_layout()

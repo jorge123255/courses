@@ -5,6 +5,40 @@ def load_css():
     """Load custom CSS styles."""
     st.markdown("""
     <style>
+    /* Study Materials Styling */
+    .study-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        border-left: 4px solid #2196F3;
+    }
+
+    .concept-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 8px 0;
+        border: 1px solid #e9ecef;
+    }
+
+    .topic-header {
+        color: #1a237e;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e3f2fd;
+    }
+
+    .concept-title {
+        color: #1565c0;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
     /* Main Layout */
     .main {
         padding: 2rem;
