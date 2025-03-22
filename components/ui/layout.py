@@ -2,34 +2,60 @@
 Layout components for the CISSP Tutor & Exam Platform.
 """
 import streamlit as st
+from .styles import apply_custom_styles # Assuming styles.py exists and contains CSS
 
-def render_enhanced_layout():
-    """Render the enhanced layout with improved UI components."""
-    st.markdown("""
-        <style>
-        .main-nav { background: #f0f2f6; padding: 1rem; border-radius: 10px; }
-        .nav-item { padding: 0.5rem; margin: 0.2rem 0; cursor: pointer; transition: all 0.3s; }
-        .nav-item:hover { background: #e0e2e6; border-radius: 5px; }
-        .nav-item.active { background: #1f67d6; color: white; border-radius: 5px; }
-        .content-card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .progress-bar { height: 8px; background: #e0e2e6; border-radius: 4px; margin: 1rem 0; }
-        .progress-fill { height: 100%; background: #1f67d6; border-radius: 4px; }
-        </style>
-    """, unsafe_allow_html=True)
+def initialize_layout():
+    apply_custom_styles()
+    st.set_page_config(
+        page_title="CISSP Tutor",
+        page_icon="📚",
+        layout="wide"
+    )
 
-    # Top navigation
+def render_header():
     st.markdown("""
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1>CISSP Tutor</h1>
-            <div style="display: flex; gap: 1rem;">
-                <div class="nav-item active">Learn</div>
-                <div class="nav-item">Practice</div>
-                <div class="nav-item">Progress</div>
-            </div>
+        <div style='text-align: center; padding: 2rem 0;'>
+            <h1>CISSP Tutor & Exam Platform</h1>
+            <p style='font-size: 1.2rem; color: #666;'>Your AI-powered study companion</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Main content area with side navigation
+def render_progress(current, total):
+    progress = (current / total) * 100
+    st.markdown(f"""
+        <div class='progress-bar'>
+            <div class='progress-bar-fill' style='width: {progress}%;'></div>
+        </div>
+        <p style='text-align: center; color: #666;'>{current}/{total} completed</p>
+    """, unsafe_allow_html=True)
+
+def render_knowledge_check(question, options, correct_index):
+    st.markdown("<div class='knowledge-check'>", unsafe_allow_html=True)
+    st.markdown(f"### {question}")
+
+    for i, option in enumerate(options):
+        if st.button(f"Option {i + 1}", key=f"option_{i}"):
+            if i == correct_index:
+                st.success("Correct! 🎉")
+            else:
+                st.error("Try again!")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def render_concept_card(title, content):
+    st.markdown(f"""
+        <div class='card'>
+            <h3>{title}</h3>
+            <p>{content}</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+def render_enhanced_layout():
+    initialize_layout()
+    render_header()
+
+    # Main content area 
     col1, col2 = st.columns([1, 3])
 
     with col1:
@@ -38,10 +64,8 @@ def render_enhanced_layout():
     with col2:
         render_main_content()
 
-def render_side_navigation():
-    """Render improved side navigation with progress tracking."""
-    st.markdown('<div class="main-nav">', unsafe_allow_html=True)
 
+def render_side_navigation():
     sections = [
         ("Security Fundamentals", 80),
         ("Risk Management", 60),
@@ -54,35 +78,22 @@ def render_side_navigation():
     ]
 
     for section, progress in sections:
+        render_progress(progress, 100) # Using render_progress for each section
         st.markdown(f"""
-            <div class="nav-item{'active' if section == 'Risk Management' else ''}">
-                <div>{section}</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {progress}%;"></div>
-                </div>
+            <div class="nav-item{' active' if section == 'Risk Management' else ''}">
+                {section}
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 def render_main_content():
-    """Render main content area with card-based layout."""
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
     st.write("## Current Topic: Risk Management")
 
-    # Create tabs for different learning modes
-    tab1, tab2, tab3 = st.tabs(["Learn", "Practice", "Review"])
+    # Example usage of new components
+    render_concept_card("Key Concepts", "Risk management fundamentals and methodologies...")
+    render_knowledge_check("What is risk?", ["A. Probability x Impact", "B. Threat x Vulnerability", "C. Asset x Control", "D. All of the above"], 0) # Example question
 
-    with tab1:
-        st.write("### Key Concepts")
-        st.write("Risk management fundamentals and methodologies...")
-
-    with tab2:
-        st.write("### Practice Questions")
-        st.write("Test your knowledge with interactive questions...")
-
-    with tab3:
-        st.write("### Review Materials")
-        st.write("Summary and additional resources...")
 
     st.markdown('</div>', unsafe_allow_html=True)
