@@ -17,4 +17,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python app.py"
+args = "python -m streamlit run app.py --server.address 0.0.0.0 --server.port 3000"
