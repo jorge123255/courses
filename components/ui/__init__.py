@@ -21,3 +21,10 @@ __all__ = [
     'render_enhanced_layout',
     'initialize_ui'
 ]
+"""
+UI components initialization.
+"""
+from .styles import load_css
+from .layout import render_enhanced_layout
+
+__all__ = ['load_css', 'render_enhanced_layout']

@@ -677,3 +677,91 @@ def load_css():
     }
     </style>
     """, unsafe_allow_html=True)
+"""
+CSS styles for the CISSP Tutor & Exam Platform.
+"""
+import streamlit as st
+
+def load_css():
+    st.markdown("""
+    <style>
+    /* Main Layout */
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Navigation */
+    .nav-header {
+        background: #ffffff;
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    /* Cards */
+    .content-card {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .content-card:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Interactive Elements */
+    .button-primary {
+        background-color: #1E88E5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .button-primary:hover {
+        background-color: #1976D2;
+    }
+
+    /* Progress Indicators */
+    .progress-bar {
+        height: 8px;
+        background: #E3F2FD;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #2196F3;
+        border-radius: 4px;
+        transition: width 0.3s;
+    }
+
+    /* Learning Sections */
+    .learning-section {
+        border-left: 4px solid #2196F3;
+        padding-left: 15px;
+        margin: 20px 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 10px;
+        }
+        
+        .content-card {
+            padding: 15px;
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)

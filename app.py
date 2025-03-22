@@ -42,9 +42,19 @@ st.set_page_config(
 
 def main():
     """Main application function."""
+    # Initialize UI
+    from components.ui.styles import load_css
+    from components.ui.layout import render_enhanced_layout
+    
+    # Load CSS
+    load_css()
+    
     # Initialize session state
     if "user_id" not in st.session_state:
         st.session_state.user_id = str(uuid.uuid4())
+    
+    # Render enhanced layout
+    render_enhanced_layout()
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
     if "current_exam" not in st.session_state:
