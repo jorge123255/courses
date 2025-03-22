@@ -42,6 +42,50 @@ st.set_page_config(
 
 def main():
     """Main application function."""
+    # Initialize Auth
+    from src.auth.auth_manager import AuthManager
+    auth_manager = AuthManager()
+    
+    # Check authentication using Replit Auth
+    user_id = st.experimental_get_query_params().get("replit_user_id", [None])[0]
+    username = st.experimental_get_query_params().get("replit_user_name", [None])[0]
+    
+    if not user_id or not username:
+        st.markdown("""
+        ### Welcome to CISSP Tutor
+        Please log in to continue:
+        <div>
+            <script authed="location.href='?replit_user_id=' + window.user_id + '&replit_user_name=' + window.user_name" src="https://auth.util.repl.co/script.js"></script>
+        </div>
+        """, unsafe_allow_html=True)
+        return
+        
+    # Authenticate user
+    auth_manager.authenticate_user(user_id, username)
+    user = auth_manager.get_user(user_id)
+    
+    # Email collection (first time)
+    if not user.email:
+        st.info("Please provide your email to receive study materials and updates")
+        email = st.text_input("Email address")
+        if email and st.button("Save"):
+            auth_manager.update_user_email(user_id, email)
+            st.success("Email saved!")
+            st.rerun()
+    
+    # Admin section
+    if auth_manager.is_admin(user_id):
+        if st.sidebar.checkbox("Show Admin Panel"):
+            st.sidebar.subheader("Admin Panel")
+            st.sidebar.markdown("---")
+            st.sidebar.text(f"Total users: {len(auth_manager.users)}")
+            if st.sidebar.button("Export User Data"):
+                st.sidebar.download_button(
+                    "Download",
+                    data=json.dumps(auth_manager.users, indent=2),
+                    file_name="users.json"
+                )
+    
     # Initialize UI
     from components.ui.styles import load_css
     from components.ui.layout import render_enhanced_layout
