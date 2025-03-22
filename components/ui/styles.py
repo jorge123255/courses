@@ -128,5 +128,142 @@ def load_css():
             background-color: #e6f7ff;
             font-weight: 600;
         }
+        /* Modern Typography */
+        h1, h2, h3 { font-family: 'Inter', sans-serif; }
+
+        /* Card Styling */
+        .stButton>button {
+            width: 100%;
+            border-radius: 8px;
+            border: none;
+            padding: 0.5rem 1rem;
+            background: #1f67d6;
+            color: white;
+            transition: all 0.3s;
+        }
+        .stButton>button:hover {
+            background: #1855b3;
+            transform: translateY(-1px);
+        }
+
+        /* Input Fields */
+        .stTextInput>div>div>input {
+            border-radius: 8px;
+            border: 1px solid #e0e2e6;
+            padding: 0.5rem;
+        }
+
+        /* Progress Indicators */
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+        }
+        .progress-step.completed {
+            background: #1f67d6;
+            color: white;
+        }
+
+        /* Quiz Components */
+        .quiz-option {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border: 1px solid #e0e2e6;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quiz-option:hover {
+            background: #f8f9fa;
+        }
+        .quiz-option.selected {
+            background: #e3f2fd;
+            border-color: #1f67d6;
+        }
         </style>
     """, unsafe_allow_html=True)
+
+def apply_custom_styles():
+    st.markdown("""
+        <style>
+        /* Modern Typography */
+        h1, h2, h3 { font-family: 'Inter', sans-serif; }
+
+        /* Card Styling */
+        .stButton>button {
+            width: 100%;
+            border-radius: 8px;
+            border: none;
+            padding: 0.5rem 1rem;
+            background: #1f67d6;
+            color: white;
+            transition: all 0.3s;
+        }
+        .stButton>button:hover {
+            background: #1855b3;
+            transform: translateY(-1px);
+        }
+
+        /* Input Fields */
+        .stTextInput>div>div>input {
+            border-radius: 8px;
+            border: 1px solid #e0e2e6;
+            padding: 0.5rem;
+        }
+
+        /* Progress Indicators */
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+        }
+        .progress-step.completed {
+            background: #1f67d6;
+            color: white;
+        }
+
+        /* Quiz Components */
+        .quiz-option {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border: 1px solid #e0e2e6;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quiz-option:hover {
+            background: #f8f9fa;
+        }
+        .quiz-option.selected {
+            background: #e3f2fd;
+            border-color: #1f67d6;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+def create_quiz_option(text, is_selected=False):
+    return f"""
+        <div class="quiz-option{'selected' if is_selected else ''}">
+            {text}
+        </div>
+    """
