@@ -167,6 +167,18 @@ def render_tutor_mode(tutor):
     """Render the tutor mode interface."""
     st.header("CISSP Tutor")
     
+    # Create tabs for different learning modes
+    tab1, tab2, tab3 = st.tabs(["Practice Questions", "Chat Assistant", "Study Materials"])
+    
+    with tab1:
+        render_practice_questions(tutor)
+    
+    with tab2:
+        render_chat_interface(tutor)
+        
+    with tab3:
+        render_study_materials(tutor)
+    
     # Display chat history
     for message in st.session_state.chat_history:
         if message["role"] == "user":
@@ -1680,3 +1692,85 @@ def render_data_management():
 
 if __name__ == "__main__":
     main()
+def render_chat_interface(tutor):
+    """Render the chat interface for asking questions about CISSP topics."""
+    st.subheader("Chat with CISSP Assistant")
+    
+    # Display chat history
+    for message in st.session_state.chat_history:
+        if message["role"] == "user":
+            st.chat_message("user").write(message["content"])
+        else:
+            with st.chat_message("assistant"):
+                st.write(message["content"])
+    
+    # Chat input
+    if prompt := st.chat_input("Ask any question about CISSP concepts..."):
+        # Add user message to chat history
+        st.session_state.chat_history.append({
+            "role": "user",
+            "content": prompt
+        })
+        
+        # Generate response
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = tutor.answer_question(st.session_state.user_id, prompt)
+                st.write(response["answer"])
+                
+                # Add assistant message to chat history
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": response["answer"]
+                })
+    
+    # Clear chat button
+    if st.session_state.chat_history and st.button("Clear Chat", key="clear_chat"):
+        st.session_state.chat_history = []
+        st.rerun()
+
+def render_study_materials(tutor):
+    """Render study materials and concept summaries."""
+    st.subheader("Study Materials")
+    
+    # Domain selection
+    domains = [
+        "Security and Risk Management",
+        "Asset Security",
+        "Security Architecture and Engineering",
+        "Communication and Network Security",
+        "Identity and Access Management",
+        "Security Assessment and Testing",
+        "Security Operations",
+        "Software Development Security"
+    ]
+    
+    selected_domain = st.selectbox("Select Domain", domains)
+    
+    # Topic selection based on domain
+    topics = tutor.get_domain_topics(selected_domain)
+    selected_topic = st.selectbox("Select Topic", topics) if topics else None
+    
+    if selected_topic:
+        # Display topic summary
+        with st.expander("Topic Summary", expanded=True):
+            summary = tutor.get_topic_summary(selected_topic)
+            st.markdown(summary)
+        
+        # Display key concepts
+        with st.expander("Key Concepts"):
+            concepts = tutor.get_key_concepts(selected_topic)
+            for concept in concepts:
+                st.markdown(f"- **{concept['name']}**: {concept['description']}")
+        
+        # Display related topics
+        with st.expander("Related Topics"):
+            related = tutor.get_related_topics(selected_topic)
+            for topic in related:
+                st.markdown(f"- {topic}")
+                
+        # Study resources
+        with st.expander("Additional Resources"):
+            resources = tutor.get_topic_resources(selected_topic)
+            for resource in resources:
+                st.markdown(f"- [{resource['title']}]({resource['link']})")
