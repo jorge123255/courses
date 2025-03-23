@@ -44,8 +44,26 @@ st.set_page_config(
 )
 
 
+def initialize_session_state():
+    """Initialize secure session state with default values."""
+    if 'user_id' not in st.session_state:
+        st.session_state.user_id = str(uuid.uuid4())
+    if 'authenticated' not in st.session_state:
+        st.session_state.authenticated = False
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
+    if 'current_exam' not in st.session_state:
+        st.session_state.current_exam = None
+    if 'answers' not in st.session_state:
+        st.session_state.answers = {}
+    if 'quiz_state' not in st.session_state:
+        st.session_state.quiz_state = {}
+
 def main():
     """Main application function."""
+    # Initialize secure session state
+    initialize_session_state()
+    
     # Initialize Flask-Login
     app = Flask(__name__)
     app.secret_key = config.SECRET_KEY #You need to set this in your config.py file.
