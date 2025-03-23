@@ -1836,7 +1836,35 @@ def render_study_materials(tutor):
     st.header("Study Materials")
 
     # Create tabs for different content types
-    study_tab, video_tab, notes_tab, analytics_tab = st.tabs(
+    study_tab, video_tab, notes_tab, ai_tutor_tab, analytics_tab = st.tabs(
+        ["📚 Study Content", "🎥 Video Lessons", "📝 Notes", "🤖 AI Tutor", "📊 Analytics"]
+    )
+
+    with ai_tutor_tab:
+        st.subheader("AI Learning Assistant")
+        user_query = st.text_area("Ask your question about CISSP concepts:", height=100)
+        
+        if st.button("Get AI Response"):
+            if user_query:
+                with st.spinner("Analyzing your question..."):
+                    analysis = adaptive_learning.analyze_query(user_query, st.session_state.user_id)
+                    
+                    # Show relevant topics
+                    st.info(f"Topics: {', '.join(analysis['topics'])}")
+                    
+                    # Show AI response
+                    st.write("Here's what you need to know:")
+                    st.markdown("""
+                    1. Core Concept
+                    2. Related Topics
+                    3. Practical Examples
+                    4. Study Recommendations
+                    """)
+                    
+                    # Show weak areas if any
+                    if analysis['weak_areas']:
+                        st.warning("Consider reviewing these related topics: " + 
+                                 ", ".join(analysis['weak_areas']))
         ["📚 Study Content", "🎥 Video Lessons", "📝 Notes", "📊 Analytics"]
     )
 

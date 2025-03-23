@@ -138,11 +138,93 @@ class UserSession:
 
 class AdaptiveLearning:
     """
-    Manages adaptive learning features.
+    Manages adaptive learning features with enhanced AI capabilities.
     """
-
-    @staticmethod
-    def analyze_query(query: str) -> Dict[str, Any]:
+    
+    def __init__(self):
+        self.learning_history = {}
+        self.topic_strengths = defaultdict(float)
+        self.learning_patterns = defaultdict(list)
+        
+    def analyze_query(self, query: str, user_id: str) -> Dict[str, Any]:
+        """Enhanced query analysis with user context"""
+        # Track user's learning patterns
+        self.learning_patterns[user_id].append({
+            'query': query,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+        # Analyze complexity and topics
+        analysis = self._analyze_complexity(query)
+        topics = self._identify_topics(query)
+        
+        # Consider user's history
+        if user_id in self.learning_history:
+            analysis['recommended_depth'] = self._calculate_depth(user_id, topics)
+            analysis['weak_areas'] = self._identify_weak_areas(user_id)
+            
+        return {
+            'topics': topics,
+            'complexity': analysis['complexity'],
+            'recommended_depth': analysis.get('recommended_depth', 0.5),
+            'weak_areas': analysis.get('weak_areas', []),
+            'timestamp': datetime.now().isoformat()
+        }
+        
+    def _analyze_complexity(self, query: str) -> Dict[str, float]:
+        """Analyze query complexity using NLP markers"""
+        technical_terms = self._get_technical_terms()
+        term_count = sum(1 for term in technical_terms if term.lower() in query.lower())
+        
+        return {
+            'complexity': min(1.0, (len(query.split()) + term_count * 2) / 30)
+        }
+        
+    def _identify_topics(self, query: str) -> List[str]:
+        """Identify CISSP domains and subtopics"""
+        domains = [
+            "Security and Risk Management",
+            "Asset Security", 
+            "Security Architecture and Engineering",
+            "Communication and Network Security",
+            "Identity and Access Management",
+            "Security Assessment and Testing",
+            "Security Operations",
+            "Software Development Security"
+        ]
+        
+        identified = []
+        for domain in domains:
+            if any(keyword.lower() in query.lower() for keyword in domain.split()):
+                identified.append(domain)
+                
+        return identified or ["General Security Concepts"]
+        
+    def _calculate_depth(self, user_id: str, topics: List[str]) -> float:
+        """Calculate appropriate depth based on user history"""
+        if not self.learning_history.get(user_id):
+            return 0.5
+            
+        topic_scores = [self.topic_strengths[user_id].get(topic, 0.3) 
+                       for topic in topics]
+        return min(1.0, sum(topic_scores) / len(topic_scores) + 0.2)
+        
+    def _identify_weak_areas(self, user_id: str) -> List[str]:
+        """Identify topics needing improvement"""
+        if not self.topic_strengths.get(user_id):
+            return []
+            
+        return [topic for topic, strength in self.topic_strengths[user_id].items()
+                if strength < 0.6]
+                
+    def _get_technical_terms(self) -> Set[str]:
+        """Get CISSP technical terms"""
+        return {
+            "CIA triad", "authentication", "authorization", "encryption",
+            "risk management", "access control", "audit", "compliance",
+            "vulnerability", "threat", "exploit", "mitigation",
+            "cryptography", "network security", "security controls"
+        }
         """
         Analyze a query to identify topics and complexity.
 
