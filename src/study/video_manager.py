@@ -39,3 +39,39 @@ class VideoManager:
     def get_all_topics(self) -> List[str]:
         """Get all topics with videos"""
         return list(self.videos.keys())
+from datetime import datetime
+import json
+import os
+
+class VideoManager:
+    def __init__(self):
+        self.videos = {}
+        self.watch_history = {}
+        
+    def add_video(self, topic: str, title: str, url: str, duration: int, description: str):
+        """Add a new video resource."""
+        video_id = str(hash(f"{topic}_{title}_{url}"))
+        self.videos[video_id] = {
+            'topic': topic,
+            'title': title,
+            'url': url,
+            'duration': duration,
+            'description': description,
+            'added_at': datetime.now().isoformat()
+        }
+        return video_id
+        
+    def get_videos_by_topic(self, topic: str):
+        """Get all videos for a specific topic."""
+        return {vid_id: vid for vid_id, vid in self.videos.items() 
+               if vid['topic'].lower() == topic.lower()}
+        
+    def track_watch_progress(self, user_id: str, video_id: str, progress: float):
+        """Track user's video watching progress."""
+        if user_id not in self.watch_history:
+            self.watch_history[user_id] = {}
+            
+        self.watch_history[user_id][video_id] = {
+            'progress': progress,
+            'last_watched': datetime.now().isoformat()
+        }

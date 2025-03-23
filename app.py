@@ -1836,6 +1836,11 @@ def render_study_materials(tutor):
     st.header("Study Materials")
 
     # Create tabs for different content types
+    study_tab, video_tab, notes_tab, analytics_tab = st.tabs(
+        ["📚 Study Content", "🎥 Video Lessons", "📝 Notes", "📊 Analytics"]
+    )
+
+    # Create tabs for different content types
     study_tab, video_tab = st.tabs(["📚 Study Content", "🎥 Video Lessons"])
 
     with study_tab:
