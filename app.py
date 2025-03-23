@@ -26,10 +26,13 @@ from src.exam.exam_generator import ExamGenerator, Exam, ExamAttempt
 # Initialize the components
 @st.cache_resource
 def initialize_components():
-    """Initialize the tutor and exam generator."""
+    """Initialize all system components."""
     tutor = CISSPTutor()
     exam_generator = ExamGenerator()
-    return tutor, exam_generator
+    spaced_system = SpacedRepetitionSystem()
+    flashcards = FlashcardSystem()
+    progress = ProgressTracker()
+    return tutor, exam_generator, spaced_system, flashcards, progress
 
 
 # Set page config
