@@ -857,8 +857,7 @@ def render_tutor_mode(tutor):
             with st.expander("Practical Application"):
                 st.markdown("### Real-World Scenario")
 
-                # Generate a scenario based on the topic
-                scenario =f"""
+                # Generate a scenario based on the topic                scenario =f"""
                 **Scenario**: You are a security consultant for a large financial organization.
 
                 Your client is implementing {question_data['topic']} controls and has asked for your expert guidance.
@@ -1653,7 +1652,7 @@ def render_data_management():
     with upload_tab2:
         # EPUB upload
         uploaded_epubs = st.file_uploader(
-            "Upload EPUB files",
+            "UploadEPUB files",
             type=["epub"],
             accept_multiple_files=True,
             key="epub_uploader"
@@ -1816,46 +1815,53 @@ def render_chat_interface(tutor):
 
 def render_study_materials(tutor):
     """Render study materials and concept summaries."""
-    st.subheader("Study Materials")
+    st.header("Study Materials")
 
-    # Domain selection
-    domains = [
-        "Security and Risk Management",
-        "Asset Security",
-        "Security Architecture and Engineering",
-        "Communication and Network Security",
-        "Identity and Access Management",
-        "Security Assessment and Testing",
-        "Security Operations",
-        "Software Development Security"
-    ]
+    # Create tabs for different content types
+    study_tab, video_tab = st.tabs(["📚 Study Content", "🎥 Video Lessons"])
 
-    selected_domain = st.selectbox("Select Domain", domains)
+    with study_tab:
+        # Domain selection
+        domains = [
+            "Security and Risk Management",
+            "Asset Security",
+            "Security Architecture and Engineering",
+            "Communication and Network Security",
+            "Identity and Access Management",
+            "Security Assessment and Testing",
+            "Security Operations",
+            "Software Development Security"
+        ]
 
-    # Topic selection based on domain
-    topics = tutor.get_domain_topics(selected_domain)
-    selected_topic = st.selectbox("Select Topic", topics) if topics else None
+        selected_domain = st.selectbox("Select Domain", domains)
 
-    if selected_topic:
-        # Display topic summary
-        with st.expander("Topic Summary", expanded=True):
-            summary = tutor.get_topic_summary(selected_topic)
-            st.markdown(summary)
+        # Topic selection based on domain
+        topics = tutor.get_domain_topics(selected_domain)
+        selected_topic = st.selectbox("Select Topic", topics) if topics else None
 
-        # Display key concepts
-        with st.expander("Key Concepts"):
-            concepts = tutor.get_key_concepts(selected_topic)
-            for concept in concepts:
-                st.markdown(f"- **{concept['name']}**: {concept['description']}")
+        if selected_topic:
+            # Display topic summary
+            with st.expander("Topic Summary", expanded=True):
+                summary = tutor.get_topic_summary(selected_topic)
+                st.markdown(summary)
 
-        # Display related topics
-        with st.expander("Related Topics"):
-            related = tutor.get_related_topics(selected_topic)
-            for topic in related:
-                st.markdown(f"- {topic}")
+            # Display key concepts
+            with st.expander("Key Concepts"):
+                concepts = tutor.get_key_concepts(selected_topic)
+                for concept in concepts:
+                    st.markdown(f"- **{concept['name']}**: {concept['description']}")
 
-        # Study resources
-        with st.expander("Additional Resources"):
-            resources = tutor.get_topic_resources(selected_topic)
-            for resource in resources:
-                st.markdown(f"- [{resource['title']}]({resource['link']})")
+            # Display related topics
+            with st.expander("Related Topics"):
+                related = tutor.get_related_topics(selected_topic)
+                for topic in related:
+                    st.markdown(f"- {topic}")
+
+            # Study resources
+            with st.expander("Additional Resources"):
+                resources = tutor.get_topic_resources(selected_topic)
+                for resource in resources:
+                    st.markdown(f"- [{resource['title']}]({resource['link']})")
+
+    with video_tab:
+        st.write("Video lessons will be added here.")
