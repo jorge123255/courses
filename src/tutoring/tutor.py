@@ -529,15 +529,24 @@ class CISSPTutor:
 
     def answer_question(self, user_id: str, query: str) -> Dict[str, Any]:
         """
-        Answer a user's question using RAG with enhanced reasoning.
+        Answer a user's question using RAG with enhanced reasoning and multi-step analysis.
         """
         session = self.get_or_create_session(user_id)
 
-        # Analyze the query
+        # Multi-step query analysis
         analysis = AdaptiveLearning.analyze_query(query)
+        query_intent = self.llm.classify_intent(query)
+        knowledge_gaps = session.identify_knowledge_gaps(analysis["topics"])
 
-        # Retrieve relevant context
-        results = self.retriever.retrieve(query)
+        # Enhanced retrieval with context awareness
+        results = self.retriever.retrieve(
+            query,
+            additional_context={
+                "intent": query_intent,
+                "gaps": knowledge_gaps,
+                "session_history": session.get_recent_interactions(5)
+            }
+        )
 
         # Apply reasoning
         reasoning = ReasoningEngine.chain_of_thought(query, results)
