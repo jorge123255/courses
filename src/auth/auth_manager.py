@@ -49,11 +49,16 @@ class AuthManager:
             return True
         return False
 
-    def authenticate_user(self, email: str, password: str) -> Optional[str]:
+    def authenticate_user(self, email: str, password: str) -> Tuple[Optional[str], Optional[str]]:
         for user_id, user_data in self.users.items():
             if user_data["email"] == email and check_password_hash(user_data["password"], password):
-                return user_id
-        return None
+                token = jwt.encode(
+                    {'user_id': user_id, 'exp': datetime.now() + timedelta(days=1)},
+                    config.SECRET_KEY,
+                    algorithm='HS256'
+                )
+                return user_id, token
+        return None, None
 
     def get_user(self, user_id: str) -> Optional[User]:
         if user_id in self.users:
